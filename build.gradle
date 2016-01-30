@@ -1,0 +1,32 @@
+buildscript {
+    ext.kotlin_version = '1.0.0-beta-4589'
+    ext.google_guava_version = '19.0'
+    ext.slf4j_api_version = '1.7.14'
+
+    repositories {
+        maven {
+            url 'http://dl.bintray.com/xingyuli/maven'
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.swordess:swordess-gradle-config-plugin:0.1.0'
+    }
+}
+
+plugins {
+    id 'org.standardout.versioneye' version '1.1.1'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+    id 'com.jfrog.bintray' version '1.5'
+}
+
+apply plugin: 'org.swordess.config'
+
+group 'org.swordess.common'
+version '0.1.0'
+
+dependencies {
+    compile "com.google.guava:guava:$google_guava_version"
+    compile "org.slf4j:slf4j-api:$slf4j_api_version"
+}
