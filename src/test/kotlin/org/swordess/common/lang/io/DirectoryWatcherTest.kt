@@ -29,10 +29,13 @@ import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.nio.file.StandardWatchEventKinds
+import java.util.HashSet
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class DirectoryWatcherTest {
 
-    lateinit var dir: String
+    lateinit var dir: File
     lateinit var watcher: DirectoryWatcher
 
     @Before
@@ -41,14 +44,15 @@ class DirectoryWatcherTest {
             if (!exists()) {
                 mkdirs()
             }
-        }.absolutePath
+        }
 
-        watcher = DirectoryWatcher(dir, StandardWatchEventKinds.ENTRY_CREATE).apply { init() }
+        watcher = DirectoryWatcher(dir.absolutePath, StandardWatchEventKinds.ENTRY_CREATE).apply { init() }
     }
 
     @After
     fun tearDown() {
         watcher.destroy()
+        dir.listFiles().forEach { it.delete() }
     }
 
     @Test(timeout = 30000)
@@ -59,10 +63,32 @@ class DirectoryWatcherTest {
         File(dir, "testCreate").createNewFile()
 
         val thread = Thread({
-            while (!invoked) { Thread.sleep(100) }
+            while (!invoked) { Thread.sleep(1000) }
         })
         thread.start()
         thread.join()
+    }
+
+    @Test
+    fun testHandlerShouldNotBeInvokedIfFilenameExtensionNotMatch() {
+        watcher.filenameExtensionInclude = ".json"
+
+        val changes = HashSet<String>()
+        watcher.addHandler { changes.add(it.change.fileName.toString()) }
+
+        File(dir, "testCreate").createNewFile()
+        File(dir, "testCreate.json").createNewFile()
+
+        val waitFor = 30000
+        var wait = 0
+        val thread = Thread({
+            while (wait < waitFor) { with(1000) { Thread.sleep(this@with.toLong()); wait += this@with } }
+        })
+        thread.start()
+        thread.join()
+
+        assertEquals(1, changes.size)
+        assertTrue("testCreate.json" in changes)
     }
 
 }

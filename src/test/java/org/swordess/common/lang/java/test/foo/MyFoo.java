@@ -22,26 +22,9 @@
  * SOFTWARE.
  */
 
-package org.swordess.common.lang.io
+package org.swordess.common.lang.java.test.foo;
 
-import java.io.File
-import java.io.InputStream
-import java.net.URL
+import org.swordess.common.lang.java.test.Marker;
 
-fun String.resourceNameAsStream(): InputStream {
-    val file = File(this)
-    if (file.exists()) {
-        return file.inputStream()
-    }
-
-    return Thread.currentThread().contextClassLoader.getResourceAsStream(this) ?: throw RuntimeException("resource not found: $this")
-}
-
-fun String.resourceNameAsURL(): URL {
-    val file = File(this)
-    if (file.exists()) {
-        return file.toURI().toURL()
-    }
-
-    return Thread.currentThread().contextClassLoader.getResource(this) ?: throw RuntimeException("resource not found: $this")
+public class MyFoo implements Marker {
 }

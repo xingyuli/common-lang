@@ -32,7 +32,7 @@ import java.nio.file.Path
 import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchEvent
 import java.nio.file.WatchService
-import java.util.ArrayList
+import java.util.concurrent.CopyOnWriteArrayList
 
 class DirectoryEvent internal constructor(val kind: WatchEvent.Kind<out Any>, val dir: Path, val change: Path)
 
@@ -43,7 +43,7 @@ class DirectoryWatcher(dir: String, vararg val events: WatchEvent.Kind<*>) : Run
     private val dir = File(dir).toPath()
 
     private lateinit var watchService: WatchService
-    private var handlers: MutableList<(DirectoryEvent)->Unit> = ArrayList()
+    private var handlers: MutableList<(DirectoryEvent)->Unit> = CopyOnWriteArrayList()
     // TODO support comma separated string
     var filenameExtensionInclude: String? = null
 

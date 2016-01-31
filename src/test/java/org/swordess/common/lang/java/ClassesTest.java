@@ -22,26 +22,34 @@
  * SOFTWARE.
  */
 
-package org.swordess.common.lang.io
+package org.swordess.common.lang.java;
 
-import java.io.File
-import java.io.InputStream
-import java.net.URL
+import kotlin.jvm.JvmClassMappingKt;
+import kotlin.jvm.functions.Function1;
+import kotlin.reflect.KClass;
+import org.junit.Test;
+import org.swordess.common.lang.Classes;
+import org.swordess.common.lang.java.test.Marker;
+import org.swordess.common.lang.java.test.foo.MyFoo;
+import org.swordess.common.lang.java.test.foo.bar.MyBar;
 
-fun String.resourceNameAsStream(): InputStream {
-    val file = File(this)
-    if (file.exists()) {
-        return file.inputStream()
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class ClassesTest {
+
+    @Test
+    public void testUnderPackageShouldFindMatchesIncludingNestedPackages() {
+        List<KClass<?>> found = Classes.underPackage("org.swordess.common.lang.java.test.foo", new Function1<KClass<?>, Boolean>() {
+            @Override
+            public Boolean invoke(KClass<?> kClass) {
+                return Marker.class.isAssignableFrom(JvmClassMappingKt.getJavaClass(kClass));
+            }
+        });
+        assertEquals(2, found.size());
+        assertTrue(found.contains(JvmClassMappingKt.getKotlinClass(MyFoo.class)) && found.contains(JvmClassMappingKt.getKotlinClass(MyBar.class)));
     }
 
-    return Thread.currentThread().contextClassLoader.getResourceAsStream(this) ?: throw RuntimeException("resource not found: $this")
-}
-
-fun String.resourceNameAsURL(): URL {
-    val file = File(this)
-    if (file.exists()) {
-        return file.toURI().toURL()
-    }
-
-    return Thread.currentThread().contextClassLoader.getResource(this) ?: throw RuntimeException("resource not found: $this")
 }
