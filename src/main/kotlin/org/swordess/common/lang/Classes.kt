@@ -27,13 +27,9 @@ package org.swordess.common.lang
 import com.google.common.reflect.ClassPath
 import kotlin.reflect.KClass
 
-class Classes {
+object Classes {
 
-    companion object {
-
-        @JvmStatic fun underPackage(packageName: String, filter: (KClass<*>) -> Boolean): List<KClass<*>> =
-                ClassPath.from(Classes::class.java.classLoader).getTopLevelClassesRecursive(packageName).map { it.load().kotlin }.filter(filter)
-
-    }
+    @JvmStatic fun underPackage(packageName: String, filter: (KClass<*>) -> Boolean): List<KClass<*>> =
+            ClassPath.from(Classes::class.java.classLoader).getTopLevelClassesRecursive(packageName).map { it.load().kotlin }.filter(filter)
 
 }
