@@ -25,6 +25,7 @@
 package org.swordess.common.lang.io
 
 import org.junit.Test
+import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.fail
@@ -73,6 +74,13 @@ class ResourcesTest {
         } catch (e: RuntimeException) {
             assertEquals("resource not found: not_exist.properties", e.message)
         }
+    }
+
+    @Test
+    fun testResourceNameAsFileAbsolutePath() {
+        val expected = File("src/test/resources/message.properties").absolutePath
+        val actual = "src/test/resources/message.properties".resourceNameAsFileAbsolutePath()
+        assertEquals(expected, actual)
     }
 
 }

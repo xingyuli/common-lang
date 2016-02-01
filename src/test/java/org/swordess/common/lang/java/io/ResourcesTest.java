@@ -27,6 +27,7 @@ package org.swordess.common.lang.java.io;
 import org.junit.Test;
 import org.swordess.common.lang.io.ResourcesKt;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -78,6 +79,13 @@ public class ResourcesTest {
         } catch (RuntimeException e) {
             assertEquals("resource not found: not_exist.properties", e.getMessage());
         }
+    }
+
+    @Test
+    public void testResourceNameAsFileAbsolutePath() {
+        String expected = new File("src/test/resources/message.properties").getAbsolutePath();
+        String actual = ResourcesKt.resourceNameAsFileAbsolutePath("src/test/resources/message.properties");
+        assertEquals(expected, actual);
     }
 
 }

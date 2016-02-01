@@ -27,6 +27,7 @@ package org.swordess.common.lang.io
 import java.io.File
 import java.io.InputStream
 import java.net.URL
+import java.net.URLDecoder
 
 fun String.resourceNameAsStream(): InputStream {
     val file = File(this)
@@ -44,4 +45,9 @@ fun String.resourceNameAsURL(): URL {
     }
 
     return Thread.currentThread().contextClassLoader.getResource(this) ?: throw RuntimeException("resource not found: $this")
+}
+
+fun String.resourceNameAsFileAbsolutePath(): String {
+    val url = this.resourceNameAsURL()
+    return URLDecoder.decode(url.file, "UTF-8")
 }
