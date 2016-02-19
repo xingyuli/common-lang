@@ -1,7 +1,7 @@
 buildscript {
-    ext.kotlin_version = '1.0.0-beta-4589'
+    ext.kotlin_version = '1.0.0'
     ext.google_guava_version = '19.0'
-    ext.slf4j_api_version = '1.7.14'
+    ext.slf4j_api_version = '1.7.16'
 
     repositories {
         maven {
@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.swordess:swordess-gradle-config-plugin:0.1.0'
+        classpath 'org.swordess:swordess-gradle-config-plugin:0.1.1'
     }
 }
 
@@ -24,7 +24,7 @@ plugins {
 apply plugin: 'org.swordess.config'
 
 group 'org.swordess.common'
-version '0.1.1'
+version '0.1.2'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
